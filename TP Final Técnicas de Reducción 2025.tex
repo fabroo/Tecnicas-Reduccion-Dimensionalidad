@@ -1,0 +1,124 @@
+\documentclass[12pt]{article}%
+
+\usepackage{amsmath,amsthm, amsfonts, amscd , amssymb}
+
+\usepackage{hyperref}
+
+\usepackage{float}
+\usepackage{listings}
+
+\usepackage{graphicx}
+\usepackage[usenames, dvipsnames]{color}
+\usepackage[latin1]{inputenc}
+\usepackage[spanish]{babel}%
+\usepackage{enumerate}% http://ctan.org/pkg/enumitem
+\usepackage{marvosym} %\Biohazard \Radioactivity \Keyboard \Stopsign
+\usepackage{manfnt}  %\dbend, \lhdbend,and \reversedvideodbend.     \textdbend, \textlhdbend,and \usepackage{phaistos} %\PHpedestrian
+\usepackage{enumitem}
+
+\setcounter{MaxMatrixCols}{30}
+
+%\setlength{\textheight}{23cm} \setlength{\textwidth}{17.5cm}
+%\setlength{\topmargin}{-1cm} \setlength{\oddsidemargin}{0cm}
+
+\usepackage{geometry}\geometry{top=2cm,bottom=2cm,left=2.5cm,right=2.5cm}
+\hyphenation{}
+
+\newcommand{\convprob}{ \buildrel{p}\over\longrightarrow}
+
+\def \sp {\textquestiondown}
+\def \RR {\mathbb{R}}
+\def \EE {\mathbb{E}}
+\def \VV {\mathbb{V}}
+
+
+
+\newcommand{\bx}{\mathbf{x}}
+\newcommand{\bX}{\mathbf{X}}
+\newcommand\bmu {\mbox{\boldmath $\mu$}}
+\newcommand{\cov}{\mathbb{C}\mbox{ov}}
+\newcommand\bSi {\mbox{\boldmath $\Sigma$}}
+\newcommand\bS {\mathbf S}
+\newcommand{\bw}{\mathbf{w}}
+\newcommand{\bA}{\mathbf{A}}
+\newcommand{\bb}{\mathbf{b}}
+
+
+\begin{document}
+	\noindent
+	\textbf{Herramientas de Visualización- Cuarto bimestre 2025}\\[0.3cm]\textbf{Trabajo Práctico Final }
+	\vspace{-0.3cm}
+	\newline
+	\rule{18cm}{0.2mm}\\
+	
+	\medskip
+	\textbf{Se debe entregar un informe .Rmd en formato pdf con la resolución y resultados del ejercicio, incluyendo todos los gráficos que crean pertinentes  y el archivo .Rmd donde se realizaron los cálculos y se programó la implementación del análisis pedido. El trabajo se puede realizar en grupos de 2 integrantes.}
+	
+	\section{Teórico}
+	 Consideremos un vector aleatorio $(\bx,Y)$, donde $\bx  \in \mathcal X \subset \mathbb R^p$ es el vector de covariables e  $Y$ es la clase, la cual toma valores en $\mathcal Y=\{0, 1\}$. Un clasificador $g$ es una funci\'on $g: \mathcal X \to \mathcal Y$. Cuando observamos un nuevo $\bx$ predecimos la clase  como $g(\bx)$.
+	
+	\medskip
+	Consideramos el \textbf{Error de Clasificaci\'on Medio}  del clasificador $g$ definido como
+	$$L(g)=\mathbb P(g(\bx)\not =Y)\, .$$
+	
+	\begin{enumerate} [label=(\alph*)]
+		
+		\item Probar que dada la naturaleza binaria de $Y$, el \textbf{Error de Clasificaci\'on Medio}  coincide con el Error Cuadrático Medio habitual, es decir
+		$$L(g)=\mathbb E((Y - g(\bx))^2)\, .$$
+		
+		\item Supongamos que las distribuciones condicionales son normales multivariadas, es decir,  $\bx |Y =1 \sim \mathcal{N}(\bmu_1,\bSi_1)$ y   $\bx |Y =0 \sim \mathcal{N}(\bmu_0,\bSi_0)$.  Probar que la regla \'optima resulta
+		
+		\begin{equation*}
+			g^{op}(\bx)=\left\{
+			\begin{array}{ll}
+				1 & \hbox{si}\; r_1(\bx) \le   r_0(\bx) + 2 \log \frac{\pi_1}{\pi_0} + \log \frac{\left| \bSi_0\right| }{\left| \bSi_1\right| }\\
+				0 &\hbox{en}\;  \hbox{c. c.}
+			\end{array}
+			\right. \,,
+		\end{equation*}
+		donde para $i=0,1$ se tiene que $\pi_i=P\left(Y=i \right) $, $r_i(\bx)=\left( 
+		{\bx-\bmu_i }\right)^{t}\bSi_i ^{-1}\left( {\bx-\bmu_i }\right)$ y $\left| \bSi_i\right|$ es la notación para indicar el determinante  de la matriz $\bSi_i$,  para $i=0,1$.		
+
+		\item Probar que si $\bSi_0=\bSi_1=\bSi$, entonces la regla del ítem anterior resulta
+\begin{equation*}
+	g^{op}(\bx)=\left\{
+	\begin{array}{ll}
+		1 & \hbox{si}\; 
+			D_1(\bx)  - 2 \log (\pi_1) \leq 	D_0(\bx)  - 2 \log (\pi_0)\\
+		0 &\hbox{en}\;  \hbox{c. c.}
+	\end{array}
+	\right. 
+\end{equation*}
+donde $	D_i(\bx)= (\bx-\bmu_i)^t \bSi^{-1}(\bx-\bmu_i) $.
+
+		\item Comprobar que si $\pi_0=\pi_1$, entonces la regla del ítem anterior resulta
+\begin{equation*}
+	g^{op}(\bx)=\left\{
+	\begin{array}{ll}
+		1 & \hbox{si}\; 
+		D_1(\bx) \leq 	D_0(\bx) \\
+		0 &\hbox{en}\;  \hbox{c. c.}
+	\end{array}
+	\right. 
+\end{equation*}
+es decir:  se clasifica a $\bx$ en la población cuya media está más cerca en distancia de Mahalanobis. Si $\bSi=\sigma^2 \mathbb I_p$ (siendo $\mathbb I_p$ la identidad de $p \times p$), ¿a qué equivaldría esta regla? 
+
+
+	\item Mostrar que si $\bSi_0$ y $\bSi_1$ no coinciden, entonces la regla óptima puede escribirse como 		
+		\begin{equation*}
+			g^{op}(\bx)=\left\{
+			\begin{array}{ll}
+				1 & \hbox{si}\; 
+				\bx^t \bA \bx + \bb^t \bx +c \le 0\\
+				0 &\hbox{en}\;  \hbox{c. c.}
+			\end{array}
+			\right. 
+		\end{equation*}
+y hallar las expresiones de $\bA$, $\bb$ y $c$.		
+
+	\end{enumerate}
+	
+	
+
+
+\end{document}
